@@ -222,9 +222,7 @@ static HANDLE open_device(const char *path, BOOL enumerate)
 {
 	HANDLE handle;
 	DWORD desired_access = (enumerate)? 0: (GENERIC_WRITE | GENERIC_READ);
-	DWORD share_mode = (enumerate)?
-	                      FILE_SHARE_READ|FILE_SHARE_WRITE:
-						  FILE_SHARE_READ | FILE_SHARE_WRITE;
+	DWORD share_mode = FILE_SHARE_READ|FILE_SHARE_WRITE;
 
 	handle = CreateFileA(path,
 		desired_access,
@@ -791,12 +789,6 @@ int HID_API_EXPORT HID_API_CALL hid_get_feature_report(hid_device *dev, unsigned
 		register_error(dev, "Send Feature Report GetOverLappedResult");
 		return -1;
 	}
-
-	/* bytes_returned does not include the first byte which contains the
-	   report ID. The data buffer actually contains one more byte than
-	   bytes_returned. */
-	bytes_returned++;
-
 	return bytes_returned;
 #endif
 }
